@@ -10,11 +10,9 @@ var activeTile: Tile = null
 
 func _ready():
 	render_board()
+	SignalBus.trait_move_up.connect(_move_up)
 	
-func _process(delta: float) -> void:
-	if not tiles or not activeTile:
-		return
-	var direction = get_direction()
+func move(direction: Vector2) -> void:
 	if direction != Vector2.ZERO:
 		var nextTile = find_next_tile(activeTile, direction)
 		if nextTile != activeTile:
@@ -22,19 +20,10 @@ func _process(delta: float) -> void:
 			activeTile = null
 			nextTile.set_occupied(true)
 			activeTile = nextTile
-		
-func get_direction() -> Vector2:
-	if Input.is_action_just_pressed("ui_right"):
-		return Vector2(1,0)
-	if Input.is_action_just_pressed("ui_left"):
-		return Vector2(-1,0)
-	if Input.is_action_just_pressed("ui_down"):
-		return Vector2(0,1)
-	if Input.is_action_just_pressed("ui_up"):
-		return Vector2(0,-1)
-	
-	return Vector2.ZERO
-	
+
+func _move_up(amount):
+	for i in amount:
+		move(Vector2(0, -1))
 	
 func find_next_tile(tile, direction: Vector2) -> Tile:
 	var newCoordinates = tile.coordinates + direction
@@ -55,12 +44,13 @@ func render_board():
 	var columnCounter = 1
 	var rowCounter = 1
 	
+	var center = self.get_viewport_rect().get_center()
+	center = center - Vector2(columns * 50 + columns - 1 * gutter, rows * 50 + rows - 1 * gutter)
+	
 	while(rowCounter <= rows):
 		var tile = TileScene.instantiate()
-		# 50 unless rowCounter is higher than 1, in that case add gutter
-		var yPos = rowCounter * (50 + gutter)
-		# 50 unless columnCounter is higher than 1, in that case add gutter
-		var xPos = columnCounter * (50 + gutter)
+		var yPos = center.y + rowCounter * (50 + gutter)
+		var xPos = center.x + columnCounter * (50 + gutter)
 		tile.position = Vector2(xPos, yPos)
 		tile.set_coordinates(columnCounter, rowCounter)
 		if columnCounter % columns == 0:

@@ -10,11 +10,11 @@ func _ready():
 
 func set_coordinates(x: int, y: int) -> void:
 	coordinates = Vector2(x, y)
-	
+
 func set_occupied(value: bool) -> void:
 	self.occupied = value
 	queue_redraw()
-	
+
 func _draw():
 		var shape = collision_shape.get_shape()
 		if shape is RectangleShape2D:

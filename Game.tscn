@@ -1,7 +1,13 @@
-[gd_scene load_steps=2 format=3 uid="uid://cklphenhukdfx"]
+[gd_scene load_steps=3 format=3 uid="uid://cklphenhukdfx"]
 
 [ext_resource type="PackedScene" uid="uid://dablhqdjmxqy1" path="res://Entities/Board/Board.tscn" id="1_wbfu4"]
+[ext_resource type="PackedScene" uid="uid://n3pltym01vhs" path="res://Entities/Card/Card.tscn" id="2_xkndl"]
 
 [node name="Game" type="Node2D"]
 
 [node name="Board" parent="." instance=ExtResource("1_wbfu4")]
+rows = 3
+columns = 3
+gutter = 10
+
+[node name="Area2D" parent="." instance=ExtResource("2_xkndl")]
